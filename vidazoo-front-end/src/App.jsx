@@ -10,6 +10,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState([]);
   const [displayData, setDisplayData] = useState([]);
+  const [toggleSort, setToggleSort] = useState(false);
 
   useEffect(() => {
     if (domains.length === 0) {
@@ -22,6 +23,20 @@ function App() {
       setDisplayData(searchQuery);
     }
   }, [searchQuery, domains]);
+
+  useEffect(() => {
+    if (!toggleSort) {
+      const sortDisplayDataDesc = displayData?.sort(function (a, b) {
+        return parseFloat(b.count) - parseFloat(a.count);
+      });
+      setDisplayData(sortDisplayDataDesc);
+    } else {
+      const sortDisplayDataAsc = displayData?.sort(function (a, b) {
+        return parseFloat(a.count) - parseFloat(b.count);
+      });
+      setDisplayData(sortDisplayDataAsc);
+    }
+  });
 
   const getWebsiteAdDomains = async () => {
     setLoading(true);
@@ -44,7 +59,12 @@ function App() {
           <CircularProgress color="secondary" />
         ) : (
           <>
-            <SearchBar domains={domains} setSearchQuery={setSearchQuery} />
+            <SearchBar
+              domains={domains}
+              setSearchQuery={setSearchQuery}
+              toggleSort={toggleSort}
+              setToggleSort={setToggleSort}
+            />
             <DomainsTable
               headers={["Domain", "Count"]}
               displayData={displayData}

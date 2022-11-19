@@ -7,9 +7,7 @@ import {
   TableHead,
   TableRow,
   Paper,
-  FilterListIcon,
 } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
 import "../Styles/App.css";
 
 function DomainsTable(props) {

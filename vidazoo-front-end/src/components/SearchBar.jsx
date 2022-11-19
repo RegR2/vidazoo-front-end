@@ -1,15 +1,9 @@
 import React from "react";
-import {
-  Paper,
-  InputBase,
-  Divider,
-  SearchIcon,
-  IconButton,
-} from "@mui/material";
+import { Paper, InputBase, Divider, IconButton } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
 function SearchBar(props) {
-  const { domains, setSearchQuery } = props;
+  const { domains, setSearchQuery, toggleSort, setToggleSort } = props;
 
   const searchFunction = (input) => {
     const searchData = domains?.map((domainData) => {
@@ -51,6 +45,9 @@ function SearchBar(props) {
         <IconButton
           sx={{ p: "10px", color: "rgb(229, 107, 111);" }}
           aria-label="filter"
+          onClick={() => {
+            setToggleSort(!toggleSort);
+          }}
         >
           <FilterListIcon />
         </IconButton>
