@@ -23,6 +23,7 @@ function DomainsTable(props) {
             ))}
           </TableRow>
         </TableHead>
+
         <TableBody>
           {displayData?.map((row, index) => (
             <TableRow

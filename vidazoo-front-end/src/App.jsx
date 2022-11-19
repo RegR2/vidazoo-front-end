@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Typography, CircularProgress } from "@mui/material";
 import getDomainsData from "./network/getDomainsData";
-import SearchBar from "./components/SearchBar";
+import SearchBarWithFilterAndDownload from "./components/SearchBarWithFilterAndDownload";
 import DomainsTable from "./components/DomainsTable";
 import "./Styles/App.css";
 
@@ -10,7 +10,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState([]);
   const [displayData, setDisplayData] = useState([]);
-  const [toggleSort, setToggleSort] = useState(false);
+  const [toggleSort, setToggleSort] = useState(true);
 
   useEffect(() => {
     if (domains.length === 0) {
@@ -25,7 +25,8 @@ function App() {
   }, [searchQuery, domains]);
 
   useEffect(() => {
-    if (!toggleSort) {
+    console.log("toggleSort", toggleSort);
+    if (toggleSort === true) {
       const sortDisplayDataDesc = displayData?.sort(function (a, b) {
         return parseFloat(b.count) - parseFloat(a.count);
       });
@@ -36,7 +37,7 @@ function App() {
       });
       setDisplayData(sortDisplayDataAsc);
     }
-  });
+  }, [toggleSort]);
 
   const getWebsiteAdDomains = async () => {
     setLoading(true);
@@ -46,6 +47,7 @@ function App() {
     });
     setDomains(sortedResponse);
     setDisplayData(sortedResponse);
+    setToggleSort(true);
     setLoading(false);
   };
 
@@ -59,11 +61,12 @@ function App() {
           <CircularProgress color="secondary" />
         ) : (
           <>
-            <SearchBar
+            <SearchBarWithFilterAndDownload
               domains={domains}
               setSearchQuery={setSearchQuery}
               toggleSort={toggleSort}
               setToggleSort={setToggleSort}
+              displayData={displayData}
             />
             <DomainsTable
               headers={["Domain", "Count"]}

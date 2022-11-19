@@ -1,9 +1,12 @@
 import React from "react";
 import { Paper, InputBase, Divider, IconButton } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
+import { ExportToCsv } from "export-to-csv";
 
-function SearchBar(props) {
-  const { domains, setSearchQuery, toggleSort, setToggleSort } = props;
+function SearchBarWithFilterAndDownload(props) {
+  const { domains, setSearchQuery, toggleSort, setToggleSort, displayData } =
+    props;
 
   const searchFunction = (input) => {
     const searchData = domains?.map((domainData) => {
@@ -20,6 +23,22 @@ function SearchBar(props) {
       return data?.searchItem;
     });
     setSearchQuery(searchItemData);
+  };
+
+  const exportToCSV = () => {
+    const csvExporter = new ExportToCsv({
+      fieldSeparator: ",",
+      quoteStrings: '"',
+      decimalSeparator: ".",
+      showLabels: true,
+      showTitle: true,
+      title: "Ads.csv",
+      useTextFile: false,
+      useBom: true,
+      useKeysAsHeaders: true,
+    });
+
+    csvExporter.generateCsv(displayData);
   };
 
   return (
@@ -51,9 +70,16 @@ function SearchBar(props) {
         >
           <FilterListIcon />
         </IconButton>
+        <IconButton
+          onClick={() => {
+            exportToCSV();
+          }}
+        >
+          <DownloadOutlinedIcon sx={{ mt: "2px" }} />
+        </IconButton>
       </Paper>
     </>
   );
 }
 
-export default SearchBar;
+export default SearchBarWithFilterAndDownload;
