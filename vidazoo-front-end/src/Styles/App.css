@@ -1,0 +1,25 @@
+* {
+  font-family: "Open Sans", sans-serif;
+}
+
+.site-header-text {
+  padding: 4%;
+  color: #355070;
+  font-size: 50px;
+}
+
+tr {
+  line-height: 25px;
+}
+
+tr:nth-child(even) {
+  background-color: rgba(234, 172, 139, 0.3);
+}
+
+tr:hover {
+  background-color: rgba(229, 107, 111, 0.3);
+}
+
+th {
+  text-align: left;
+}
