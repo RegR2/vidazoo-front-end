@@ -5,8 +5,7 @@ import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import { ExportToCsv } from "export-to-csv";
 
 function SearchBarWithFilterAndDownload(props) {
-  const { domains, setSearchQuery, toggleSort, setToggleSort, displayData } =
-    props;
+  const { domains, setSearchQuery, displayData } = props;
 
   const searchFunction = (input) => {
     const searchData = domains?.map((domainData) => {
@@ -61,15 +60,7 @@ function SearchBarWithFilterAndDownload(props) {
           }}
         />
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-        <IconButton
-          sx={{ p: "10px", color: "rgb(229, 107, 111);" }}
-          aria-label="filter"
-          onClick={() => {
-            setToggleSort(!toggleSort);
-          }}
-        >
-          <FilterListIcon />
-        </IconButton>
+
         <IconButton
           onClick={() => {
             exportToCSV();

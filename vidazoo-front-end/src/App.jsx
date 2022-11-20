@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Container, Typography, CircularProgress } from "@mui/material";
+import {
+  Container,
+  Typography,
+  CircularProgress,
+  IconButton,
+} from "@mui/material";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import AbcIcon from "@mui/icons-material/Abc";
 import getDomainsData from "./network/getDomainsData";
 import SearchBarWithFilterAndDownload from "./components/SearchBarWithFilterAndDownload";
 import DomainsTable from "./components/DomainsTable";
@@ -10,32 +18,39 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState([]);
   const [displayData, setDisplayData] = useState([]);
-  const [toggleSort, setToggleSort] = useState(true);
+  const [toggleSort, setToggleSort] = useState("desc");
 
   useEffect(() => {
-    if (domains.length === 0) {
+    if (domains?.length === 0) {
       getWebsiteAdDomains();
     }
-  }, [domains.length]);
+  }, [domains]);
 
   useEffect(() => {
-    if (searchQuery.length > 0) {
+    if (searchQuery?.length > 0) {
       setDisplayData(searchQuery);
     }
   }, [searchQuery, domains]);
 
   useEffect(() => {
-    console.log("toggleSort", toggleSort);
-    if (toggleSort === true) {
+    if (toggleSort == "desc") {
+      console.log("toggleSortdesc", toggleSort);
       const sortDisplayDataDesc = displayData?.sort(function (a, b) {
-        return parseFloat(b.count) - parseFloat(a.count);
+        return parseFloat(b?.count) - parseFloat(a?.count);
       });
-      setDisplayData(sortDisplayDataDesc);
-    } else {
+      setDisplayData([...sortDisplayDataDesc]);
+    } else if (toggleSort == "asc") {
+      console.log("toggleSortasc", toggleSort);
       const sortDisplayDataAsc = displayData?.sort(function (a, b) {
-        return parseFloat(a.count) - parseFloat(b.count);
+        return parseFloat(a?.count) - parseFloat(b?.count);
       });
-      setDisplayData(sortDisplayDataAsc);
+      setDisplayData([...sortDisplayDataAsc]);
+    } else if (toggleSort == "name") {
+      console.log("toggleSortname", toggleSort);
+      const sortDisplayDataName = displayData?.sort(function (a, b) {
+        return a.name.localeCompare(b.name);
+      });
+      setDisplayData([...sortDisplayDataName]);
     }
   }, [toggleSort]);
 
@@ -47,7 +62,6 @@ function App() {
     });
     setDomains(sortedResponse);
     setDisplayData(sortedResponse);
-    setToggleSort(true);
     setLoading(false);
   };
 
@@ -69,7 +83,42 @@ function App() {
               displayData={displayData}
             />
             <DomainsTable
-              headers={["Domain", "Count"]}
+              headers={[
+                "Domain",
+                [
+                  "Count",
+                  <IconButton
+                    sx={{ p: "10px", color: "rgb(229, 107, 111);" }}
+                    aria-label="filter"
+                    onClick={() => {
+                      setToggleSort("desc");
+                    }}
+                    key="desc"
+                  >
+                    <ArrowDownwardIcon />
+                  </IconButton>,
+                  <IconButton
+                    sx={{ p: "10px", color: "rgb(229, 107, 111);" }}
+                    aria-label="filter"
+                    onClick={() => {
+                      setToggleSort("asc");
+                    }}
+                    key="asc"
+                  >
+                    <ArrowUpwardIcon />
+                  </IconButton>,
+                  <IconButton
+                    sx={{ p: "10px", color: "rgb(229, 107, 111);" }}
+                    aria-label="filter"
+                    onClick={() => {
+                      setToggleSort("name");
+                    }}
+                    key="name"
+                  >
+                    <AbcIcon />
+                  </IconButton>,
+                ],
+              ]}
               displayData={displayData}
             />
           </>
